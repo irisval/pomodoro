@@ -1,51 +1,25 @@
 (function(x) {
-	function loadDefault() {
-
-		let x = [];
-		x.push(new timeBlock("Single Pomodoro", "00:03"));
-		x.push(new timeBlock("Single Pomodoro", "00:02"));
-		x.push(new timeBlock("Single Pomodoro", "00:01"));
-		x.push(new timeBlock("Single Pomodoro", "00:01"));
-		x.push(new timeBlock("Single Pomodoro", "00:01"));
-		x.push(new timeBlock("Single Pomodoro", "00:01"));
-
-		let f = new timeBlock("Single Pomodoro", "00:03");
-
-		let d = new timeBlock("Single Pomodoro", "00:04");
-
-		async function gross() {
-			for (let i of x) {
-				await i.runTimer();
-			
-			}
-		}
-
-		gross();
-
+	// timer object
+	let timer = function(sched) {
+		this.schedule = sched;
+		this.curr = 0;
+	}
+	timer.prototype.loadTable = function() {
 		const table = document.querySelector("#timer-schedule");
 		let tb;
-		for (let i = 0; i < 6; i++) {
-			if (i % 2 == 0) {
-				tb = new timeBlock("Single Pomodoro", "00:04")
+		for (let i = 0; i < this.schedule.length; i++) {	
+			this.schedule[i].displayRow(table);
 				// this.schedule.push(tb);
-				tb.displayRow(table);
-			} else {
-				tb = new timeBlock("Short Break", "0:05");
-				// this.schedule.push(tb);
-				tb.displayRow(table);
-			}
 		}
-		tb = new timeBlock("Single Pomodoro", "00:00");
-		// this.schedule.push(tb);
-		tb.displayRow(table);
-		tb = new timeBlock("Long Break", "14:00");
-		// this.schedule.push(tb);
-		tb.displayRow(table);
-		let r = table.getElementsByTagName("tr")[1];
-		// r.style.backgroundColor = "#FA8072";
+	},
+	timer.prototype.start = async function() {
+		this.loadTable()
+		for (let i of this.schedule) {
+			await i.runTimer();
+		}
 	}
 
-
+	// timeblock object
 	let timeBlock = function(i, ttype, duration) {
 		this.i = i;
 		this.ttype = ttype;
@@ -63,13 +37,16 @@
 	timeBlock.prototype.complete = function() {
 		return !this.endTime == "--:--";
 	},
-
+	timeBlock.prototype.print = function() {
+		return this.i + " " + this.duration + " " + this.ttype;
+	},
 	timeBlock.prototype.runTimer = function() {
 		this.started = true;
 			//document.querySelector('#time').textContent = this.getMinutes() + ":" + this.getSeconds();
+			console.log("DONT IGNORE THIS LINE " + this.print())
 			let duration = (this.getMinutes() * 60) + this.getSeconds();
 			let min, sec;
-//#b74e91
+	//#b74e91
 		return new Promise(function(resolve, reject) {
 			let timer = setInterval(function(){
 				min = parseInt(duration / 60);
@@ -123,6 +100,28 @@
 		table.appendChild(tbody);
 	}
 
+	// load
+
+	function loadDefault() {
+
+		let defaultCycle = [];
+		defaultCycle.push(new timeBlock(0, "pomodoro", "00:04"));
+		defaultCycle.push(new timeBlock(1, "short-break", "00:02"));
+		defaultCycle.push(new timeBlock(2, "pomodoro", "00:04"));
+		defaultCycle.push(new timeBlock(3, "short-break", "00:02"));
+		defaultCycle.push(new timeBlock(4, "pomodoro", "00:04"));
+		defaultCycle.push(new timeBlock(5, "short-break", "00:02"));
+		defaultCycle.push(new timeBlock(6, "pomodoro", "00:04"));
+		defaultCycle.push(new timeBlock(7, "short-break", "00:02"));
+
+		t = new timer(defaultCycle);
+		t.start();
+		
+		
+	}
+
+
+	
 x(function() {
 	loadDefault();
 })
@@ -265,7 +264,7 @@ x(function() {
 // 			let tb;
 // 			for (let i = 0; i < 6; i++) {
 // 				if (i % 2 == 0) {
-// 					tb = this.createTimeBlock("Single Pomodoro", "00:04");
+// 					tb = this.createTimeBlock("Single cap", "00:04");
 // 					this.schedule.push(tb);
 // 					tb.displayRow(table);
 // 				} else {
@@ -274,7 +273,7 @@ x(function() {
 // 					tb.displayRow(table);
 // 				}
 // 			}
-// 			tb = this.createTimeBlock("Single Pomodoro", "00:00");
+// 			tb = this.createTimeBlock("Single cap", "00:00");
 // 			this.schedule.push(tb);
 // 			tb.displayRow(table);
 // 			tb = this.createTimeBlock("Long Break", "14:00");
