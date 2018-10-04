@@ -1,19 +1,83 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="import" href="sections/timer.html">
+    <link rel="import" href="sections/pomodoros.html">
+    <link rel="import" href="sections/history.html">
+</head>
 
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
-  </body>
-</html>
+<body>
+    
+    <!DOCTYPE HTML>
+
+    <html>
+
+    <head>
+        <title>Electron tutorial app</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+    </head>
+
+    <body>
+
+        <!-- Sidebar -->
+        <section id="sidebar">
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li><a id="welcome-menu" data-section="timer" href="#">Timer</a></li>
+                        <li><a data-section="pomodoros" href="#">Pomodoros</a></li>
+                        <li><a data-section="history" href="#">History</a></li>
+                       <!--  <li><a data-section="getintouch" href="#">Get in touch</a></li> -->
+                    </ul>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Wrapper -->
+        <div id="wrapper">
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer" class="wrapper style1-alt">
+            <div class="inner">
+                <ul class="menu">
+                    <li>&copy; Untitled. All rights reserved.</li>
+                    <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </div>
+        </footer>
+
+
+
+        <script>
+            window.$ = window.jQuery = require('jquery');
+        </script>
+     
+        <script src="assets/js/jquery.scrollex.min.js"></script>
+        <script src="assets/js/jquery.scrolly.min.js"></script>
+        <script src="assets/js/skel.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+        <script>
+            require('./assets/js/menu')
+        </script>
+        <script>
+          require('./index')
+   
+</script>
+        <script>
+            // You can also require other files to run in this process
+   require('./assets/js/timer');
+              require('./renderer.js')
+        </script>
+    </body>
+
+    </html>
