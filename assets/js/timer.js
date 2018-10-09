@@ -1,76 +1,178 @@
 (function(x) {
 	// timer object
-	let timer = function(sched) {
+	// function Timer(schedule) {
+	// 	this.schedule = schedule;
+	// 	this.curr = 0;
+	// 	this.second = 0;
+
+	// 	this.loadTable = function() {
+	// 		let startMin = ("0" + this.schedule[0].getMinutes()).slice(-2);
+	// 		let startSec = ("0" + this.schedule[0].getSeconds()).slice(-2);
+	// 		document.querySelector('#time').textContent = startMin + ":" + startSec;
+
+	// 		const table = document.querySelector("#timer-schedule");
+	// 		let tb;
+	// 		for (let i = 0; i < this.schedule.length; i++) {	
+	// 			this.schedule[i].displayRow(table);
+	// 				// this.schedule.push(tb);
+	// 		}
+	// 	};
+
+	// 	this.start = async function() {
+	// 		for (let i of this.schedule) {
+	// 			await i.runTimer();
+	// 		}
+	// 	};
+	// 	this.runTimer = function() {
+	// 		console.log(this.second);
+	// 		t = setInterval(function() {
+	// 			this.second += 1;
+	// 			console.log(this.second);
+	// 		}, 1000);
+	// 	}
+	// }
+	// BAH
+	// function makeTimer(schedule) {
+	// 	let timer = {
+	// 		schedule: schedule,
+	// 		curr: 0,
+	// 		second: 0,
+	// 		loadTable: function() {
+	// 			let startMin = ("0" + this.schedule[0].getMinutes()).slice(-2);
+	// 			let startSec = ("0" + this.schedule[0].getSeconds()).slice(-2);
+	// 			document.querySelector('#time').textContent = startMin + ":" + startSec;
+
+	// 			const table = document.querySelector("#timer-schedule");
+	// 			let tb;
+	// 			for (let i = 0; i < this.schedule.length; i++) {	
+	// 				this.schedule[i].displayRow(table);
+	// 					// this.schedule.push(tb);
+	// 			}
+	// 		},
+	// 		start: async function() {
+	// 			for (let i of this.schedule) {
+	// 				await i.runTimer();
+	// 			}
+	// 		},
+	// 		runTimer: function() {
+	// 			console.log(this.second);
+	// 			t = setInterval(function() {
+	// 				console.log(this.second);
+	// 			}, 1000);
+	// 		}
+	// 	}
+	// 	return timer;
+	// }
+	// BAH
+	let Timer = function(sched) {
 		this.schedule = sched;
 		this.curr = 0;
+		this.second = 0;
+		this.id = this.init();
 	}
-	timer.prototype.loadTable = function() {
-		const table = document.querySelector("#timer-schedule");
-		let tb;
-		for (let i = 0; i < this.schedule.length; i++) {	
-			this.schedule[i].displayRow(table);
-				// this.schedule.push(tb);
-		}
+
+	Timer.prototype.init = function() {
+		this.loadTable();
+		id = setInterval(this.runTimer.bind(this), 1000);
+		return id;
+	}
+	Timer.prototype.loadTable = function() {
+		// let startMin = ("0" + this.schedule[0].getMinutes()).slice(-2);
+		// 	let startSec = ("0" + this.schedule[0].getSeconds()).slice(-2);
+		let startMin = this.schedule[0].initialMinuteAmt;
+		let startSec = this.schedule[0].initialSecondAmt;
+
+			document.querySelector('#time').textContent = startMin + ":" + startSec;
+
+			const table = document.querySelector("#timer-schedule");
+			let tb;
+			for (let i = 0; i < this.schedule.length; i++) {	
+				this.schedule[i].displayRow(table);
+					// this.schedule.push(tb);
+			}
 	},
-	timer.prototype.start = async function() {
-		this.loadTable()
+	Timer.prototype.start = async function() {
 		for (let i of this.schedule) {
 			await i.runTimer();
 		}
+	},
+	Timer.prototype.runTimer = function() {
+		let tb = this.schedule[this.curr];
+		let dur = tb.duration;
+		let min = parseInt(dur / 60);
+		let sec = parseInt(dur % 60);
+		min = ("0" + min).slice(-2);
+		sec = ("0" + sec).slice(-2);
+		document.querySelector('#time').textContent = min + ":" + sec;
+		tb.updateDuration("-", 1);
+
+		if (tb.duration < 0) {
+			this.curr++;
+		}
+
+		this.second++;
+
+	},
+	Timer.prototype.runPomodoros = function() {
+
 	}
 
+
 	// timeblock object
-	let timeBlock = function(i, ttype, duration) {
+	let TimeBlock = function(i, ttype, timeAmt) {
 		this.i = i;
 		this.ttype = ttype;
-		this.duration = duration;
+		this.timeAmt = timeAmt;
+		this.initialMinuteAmt = parseInt(this.timeAmt.split(":")[0]);
+		this.initialSecondAmt = parseInt(this.timeAmt.split(":")[1]);
+		this.duration = (this.initialMinuteAmt * 60) + this.initialSecondAmt;
 		this.startTime =  "--:--";
 		this.endTime =  "--:--";
 		this.completed = false;
 	}
-	timeBlock.prototype.getMinutes = function() {
-		return parseInt(this.duration.split(":")[0]);
-	},
-	timeBlock.prototype.getSeconds = function() {
-		return parseInt(this.duration.split(":")[1]);
-	},
-	timeBlock.prototype.complete = function() {
+	
+	TimeBlock.prototype.complete = function() {
 		return !this.endTime == "--:--";
 	},
-	timeBlock.prototype.print = function() {
-		return this.i + " " + this.duration + " " + this.ttype;
+	TimeBlock.prototype.updateDuration = function(op, amt) {
+		this.duration = eval(this.duration + op + amt);
+		console.log(this.duration);
 	},
-	timeBlock.prototype.runTimer = function() {
-		this.started = true;
-			//document.querySelector('#time').textContent = this.getMinutes() + ":" + this.getSeconds();
-			console.log("DONT IGNORE THIS LINE " + this.print())
-			let duration = (this.getMinutes() * 60) + this.getSeconds();
-			let min, sec;
-	//#b74e91
-		return new Promise(function(resolve, reject) {
-			let timer = setInterval(function(){
-				min = parseInt(duration / 60);
-				sec = parseInt(duration % 60);
+	TimeBlock.prototype.print = function() {
+		return this.i + " " + this.timeAmt + " " + this.ttype;
+	},
+	// TimeBlock.prototype.runTimer = function() {
+	// 	this.started = true;
+	// 		//document.querySelector('#time').textContent = this.getMinutes() + ":" + this.getSeconds();
+	// 		console.log("DONT IGNORE THIS LINE " + this.print())
+	// 		let duration = this.duration;
+	// 		//let duration = (this.getMinutes() * 60) + this.getSeconds();
+	// 		let min, sec;
+	// //#b74e91
+	// 	return new Promise(function(resolve, reject) {
+	// 		let timer = setInterval(function(){
+	// 			min = parseInt(duration / 60);
+	// 			sec = parseInt(duration % 60);
 
-				min = ("0" + min).slice(-2);
-				sec = ("0" + sec).slice(-2);
+	// 			min = ("0" + min).slice(-2);
+	// 			sec = ("0" + sec).slice(-2);
 
-				document.querySelector('#time').textContent = min + ":" + sec;
+	// 			document.querySelector('#time').textContent = min + ":" + sec;
 				
 			
-				if (--duration < 0) {
-					this.completed = true;
-					clearInterval(timer);
-					resolve("done");
+	// 			if (--duration < 0) {
+	// 				this.completed = true;
+	// 				clearInterval(timer);
+	// 				resolve("done");
 
-				}
-			}, 1000);
-		})
+	// 			}
+	// 		}, 1000);
+	// 	})
 		
-	},
+	// },
 
 
-	timeBlock.prototype.displayRow = function() {
+	TimeBlock.prototype.displayRow = function() {
 		let table = document.querySelector("#timer-schedule");
 
 		let row = document.createElement("tr");
@@ -105,19 +207,23 @@
 	function loadDefault() {
 
 		let defaultCycle = [];
-		defaultCycle.push(new timeBlock(0, "pomodoro", "00:04"));
-		defaultCycle.push(new timeBlock(1, "short-break", "00:02"));
-		defaultCycle.push(new timeBlock(2, "pomodoro", "00:04"));
-		defaultCycle.push(new timeBlock(3, "short-break", "00:02"));
-		defaultCycle.push(new timeBlock(4, "pomodoro", "00:04"));
-		defaultCycle.push(new timeBlock(5, "short-break", "00:02"));
-		defaultCycle.push(new timeBlock(6, "pomodoro", "00:04"));
-		defaultCycle.push(new timeBlock(7, "short-break", "00:02"));
+		defaultCycle.push(new TimeBlock(0, "pomodoro", "00:04"));
+		defaultCycle.push(new TimeBlock(1, "short-break", "00:02"));
+		defaultCycle.push(new TimeBlock(2, "pomodoro", "00:04"));
+		defaultCycle.push(new TimeBlock(3, "short-break", "00:02"));
+		defaultCycle.push(new TimeBlock(4, "pomodoro", "00:04"));
+		defaultCycle.push(new TimeBlock(5, "short-break", "00:02"));
+		defaultCycle.push(new TimeBlock(6, "pomodoro", "00:04"));
+		defaultCycle.push(new TimeBlock(7, "short-break", "00:02"));
 
-		t = new timer(defaultCycle);
-		t.start();
-		
-		
+		t = new Timer(defaultCycle)
+		t.runTimer();
+
+
+
+		document.getElementById("play").addEventListener("click", function() {
+			//t.start();
+		});	
 	}
 
 
