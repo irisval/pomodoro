@@ -1,57 +1,57 @@
 (function(x) {
 
+	// timer object
 	let Timer = function(sched) {
+		this.pomodoroNum = sched.length;
 		this.schedule = sched;
 		this.curr = 0;
 		this.second = 0;
-		this.id = this.init();
+		this.paused = false;
+		this.id = 0;
 	}
 
 	Timer.prototype.init = function() {
 		this.loadTable();
-		id = setInterval(this.runTimer.bind(this), 1000);
-		return id;
+		this.id = setInterval(this.run.bind(this), 1000);
 	}
+
 	Timer.prototype.loadTable = function() {
-		// let startMin = ("0" + this.schedule[0].getMinutes()).slice(-2);
-		// 	let startSec = ("0" + this.schedule[0].getSeconds()).slice(-2);
-		let startMin = this.schedule[0].initialMinuteAmt;
-		let startSec = this.schedule[0].initialSecondAmt;
-
-			document.querySelector('#time').textContent = startMin + ":" + startSec;
-
 			const table = document.querySelector("#timer-schedule");
 			let tb;
 			for (let i = 0; i < this.schedule.length; i++) {	
 				this.schedule[i].displayRow(table);
-					// this.schedule.push(tb);
 			}
 	},
-	Timer.prototype.start = async function() {
-		for (let i of this.schedule) {
-			await i.runTimer();
-		}
-	},
-	Timer.prototype.runTimer = function() {
-		let tb = this.schedule[this.curr];
-		let dur = tb.duration;
-		let min = parseInt(dur / 60);
-		let sec = parseInt(dur % 60);
-		min = ("0" + min).slice(-2);
-		sec = ("0" + sec).slice(-2);
-		document.querySelector('#time').textContent = min + ":" + sec;
-		tb.updateDuration("-", 1);
 
-		if (tb.duration < 0) {
-			this.curr++;
-		}
-
-		this.second++;
+	Timer.prototype.pause = function() {
+		this.paused = !this.paused;
 
 	},
-	// Timer.prototype.runPomodoros = function() {
 
-	// }
+	Timer.prototype.run= function() {
+		if (this.curr == this.pomodoroNum) {
+			clearInterval(this.id);
+		} else {
+			if (!this.paused) {
+
+				let tb = this.schedule[this.curr];
+				let dur = tb.duration;
+				let min = parseInt(dur / 60);
+				let sec = parseInt(dur % 60);
+				min = ("0" + min).slice(-2);
+				sec = ("0" + sec).slice(-2);
+				document.querySelector('#time').textContent = min + ":" + sec;
+				tb.updateDuration("-", 1);
+
+				if (tb.duration < 0) {
+					this.curr++;
+				}
+				this.second++;
+			}
+			
+		}	
+	}
+
 
 
 	// timeblock object
@@ -78,7 +78,7 @@
 		return this.i + " " + this.timeAmt + " " + this.ttype;
 	}
 
-	
+
 
 	TimeBlock.prototype.displayRow = function() {
 		let table = document.querySelector("#timer-schedule");
@@ -118,20 +118,28 @@
 		defaultCycle.push(new TimeBlock(0, "pomodoro", "00:04"));
 		defaultCycle.push(new TimeBlock(1, "short-break", "00:02"));
 		defaultCycle.push(new TimeBlock(2, "pomodoro", "00:04"));
-		defaultCycle.push(new TimeBlock(3, "short-break", "00:02"));
-		defaultCycle.push(new TimeBlock(4, "pomodoro", "00:04"));
-		defaultCycle.push(new TimeBlock(5, "short-break", "00:02"));
-		defaultCycle.push(new TimeBlock(6, "pomodoro", "00:04"));
-		defaultCycle.push(new TimeBlock(7, "short-break", "00:02"));
+		// defaultCycle.push(new TimeBlock(3, "short-break", "00:02"));
+		// defaultCycle.push(new TimeBlock(4, "pomodoro", "00:04"));
+		// defaultCycle.push(new TimeBlock(5, "short-break", "00:02"));
+		// defaultCycle.push(new TimeBlock(6, "pomodoro", "00:04"));
+		// defaultCycle.push(new TimeBlock(7, "short-break", "00:02"));
 
 		t = new Timer(defaultCycle)
-		t.runTimer();
-
-
-
 		document.getElementById("play").addEventListener("click", function() {
-			// t.start();
+			t.init();
 		});	
+
+		document.getElementById("pause").addEventListener("click", function() {
+			t.pause();
+			document.getElementById("pause").classList.toggle("paused");
+			if (document.getElementById("pause").classList.contains("paused")) {
+				document.getElementById("pause").innerHTML = "Unpause";
+			} else {
+				document.getElementById("pause").innerHTML = "Pause";
+			}
+		});	
+
+		
 	}
 
 
