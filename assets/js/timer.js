@@ -7,33 +7,46 @@
 		this.curr = 0;
 		this.second = 0;
 		this.paused = false;
+		this.endingBlock = false;
 		this.id = 0;
+		this.table = document.querySelector("#timer-schedule");
+		this.loadTable();
 	}
 
 	Timer.prototype.init = function() {
-		this.loadTable();
+		this.switchBlock();
 		this.id = setInterval(this.run.bind(this), 1000);
 	}
 
 	Timer.prototype.loadTable = function() {
-			const table = document.querySelector("#timer-schedule");
 			let tb;
 			for (let i = 0; i < this.schedule.length; i++) {	
-				this.schedule[i].displayRow(table);
+				this.schedule[i].displayRow(this.table);
 			}
+	},
+
+	Timer.prototype.switchBlock = function() {
+		// console.log("WOOT " + this.curr)
+		this.table.rows[this.curr + 1].className += "currentBlock";
+		this.table.rows[this.curr + 1].cells[2].innerHTML = new Date().toLocaleTimeString();
+		document.getElementById("tracking").innerHTML = this.schedule[this.curr].ttype + ", " + (this.curr + 1) + "/" + this.pomodoroNum;
 	},
 
 	Timer.prototype.pause = function() {
 		this.paused = !this.paused;
-
 	},
 
-	Timer.prototype.run= function() {
+	Timer.prototype.run = function() {
+		
 		if (this.curr == this.pomodoroNum) {
 			clearInterval(this.id);
 		} else {
 			if (!this.paused) {
 
+				if (this.endingBlock) {
+					this.switchBlock();
+					this.endingBlock = false;
+				}
 				let tb = this.schedule[this.curr];
 				let dur = tb.duration;
 				let min = parseInt(dur / 60);
@@ -41,12 +54,19 @@
 				min = ("0" + min).slice(-2);
 				sec = ("0" + sec).slice(-2);
 				document.querySelector('#time').textContent = min + ":" + sec;
-				tb.updateDuration("-", 1);
-
-				if (tb.duration < 0) {
+				
+				if (dur  == 0) {
+					this.table.rows[this.curr + 1].cells[3].innerHTML = new Date().toLocaleTimeString();
+					this.table.rows[this.curr + 1].classList.remove("currentBlock");
 					this.curr++;
+					this.endingBlock = true;
+
+					// this.switchBlock();
+					
 				}
-				this.second++;
+				
+				
+				tb.updateDuration("-", 1);
 			}
 			
 		}	
@@ -66,13 +86,14 @@
 		this.endTime =  "--:--";
 		this.completed = false;
 	}
+
 	
 	TimeBlock.prototype.complete = function() {
 		return !this.endTime == "--:--";
 	},
 	TimeBlock.prototype.updateDuration = function(op, amt) {
 		this.duration = eval(this.duration + op + amt);
-		console.log(this.duration);
+		// console.log(this.duration);
 	},
 	TimeBlock.prototype.print = function() {
 		return this.i + " " + this.timeAmt + " " + this.ttype;
@@ -80,8 +101,7 @@
 
 
 
-	TimeBlock.prototype.displayRow = function() {
-		let table = document.querySelector("#timer-schedule");
+	TimeBlock.prototype.displayRow = function(table) {
 
 		let row = document.createElement("tr");
 		let tbody = document.createElement("tbody");
