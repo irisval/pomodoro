@@ -10,7 +10,6 @@
 		this.endingBlock = false;
 		this.id = 0;
 		this.table = document.querySelector("#timer-schedule");
-		this.loadTable();
 	}
 
 	Timer.prototype.init = function() {
@@ -18,23 +17,17 @@
 		this.id = setInterval(this.run.bind(this), 1000);
 	}
 
-	Timer.prototype.loadTable = function() {
-			let tb;
-			for (let i = 0; i < this.schedule.length; i++) {	
-				this.schedule[i].displayRow(this.table);
-			}
+
+	Timer.prototype.pause = function() {
+		this.paused = !this.paused;
 	},
 
 	Timer.prototype.switchBlock = function() {
-		// console.log("WOOT " + this.curr)
 		this.table.rows[this.curr + 1].className += "currentBlock";
 		this.table.rows[this.curr + 1].cells[2].innerHTML = new Date().toLocaleTimeString();
 		document.getElementById("tracking").innerHTML = this.schedule[this.curr].ttype + ", " + (this.curr + 1) + "/" + this.pomodoroNum;
 	},
 
-	Timer.prototype.pause = function() {
-		this.paused = !this.paused;
-	},
 
 	Timer.prototype.run = function() {
 		
@@ -75,13 +68,15 @@
 
 
 	// timeblock object
-	let TimeBlock = function(i, ttype, timeAmt) {
-		this.i = i;
+	let TimeBlock = function(ttype, timeAmt) {
 		this.ttype = ttype;
 		this.timeAmt = timeAmt;
-		this.initialMinuteAmt = parseInt(this.timeAmt.split(":")[0]);
-		this.initialSecondAmt = parseInt(this.timeAmt.split(":")[1]);
-		this.duration = (this.initialMinuteAmt * 60) + this.initialSecondAmt;
+		this.initialMinuteAmt = timeAmt / 60; 
+		this.initialSecondAmt = timeAmt % 60;
+		this.duration = timeAmt;
+		// this.initialMinuteAmt = parseInt(this.timeAmt.split(":")[0]);
+		// this.initialSecondAmt = parseInt(this.timeAmt.split(":")[1]);
+		// this.duration = (this.initialMinuteAmt * 60) + this.initialSecondAmt;
 		this.startTime =  "--:--";
 		this.endTime =  "--:--";
 		this.completed = false;
@@ -95,11 +90,9 @@
 		this.duration = eval(this.duration + op + amt);
 		// console.log(this.duration);
 	},
-	TimeBlock.prototype.print = function() {
-		return this.i + " " + this.timeAmt + " " + this.ttype;
-	}
-
-
+	// TimeBlock.prototype.print = function() {
+	// 	return this.i + " " + this.timeAmt + " " + this.ttype;
+	// }
 
 	TimeBlock.prototype.displayRow = function(table) {
 
@@ -134,19 +127,71 @@
 
 	function loadDefault() {
 
-		let defaultCycle = [];
-		defaultCycle.push(new TimeBlock(0, "pomodoro", "00:04"));
-		defaultCycle.push(new TimeBlock(1, "short-break", "00:02"));
-		defaultCycle.push(new TimeBlock(2, "pomodoro", "00:04"));
-		// defaultCycle.push(new TimeBlock(3, "short-break", "00:02"));
-		// defaultCycle.push(new TimeBlock(4, "pomodoro", "00:04"));
-		// defaultCycle.push(new TimeBlock(5, "short-break", "00:02"));
-		// defaultCycle.push(new TimeBlock(6, "pomodoro", "00:04"));
-		// defaultCycle.push(new TimeBlock(7, "short-break", "00:02"));
+		// let defaultCycle = [];
+		// defaultCycle.push(new TimeBlock("pomodoro", "00:04"));
+		// defaultCycle.push(new TimeBlock("short-break", "00:02"));
+		// defaultCycle.push(new TimeBlock("pomodoro", "00:04"));
+		// defaultCycle.push(new TimeBlock("short-break", "00:02"));
+		
+		let cycle = [];
+		let t;
 
-		t = new Timer(defaultCycle)
-		document.getElementById("play").addEventListener("click", function() {
+		// document.getElementById("makeSchedule").addEventListener("click", function() {
+		// 	this.setAttribute("style", "display: none;")
+		// 	document.getElementById("makeSchedule").setAttribute("style", "display: none;");
+
+		// });
+
+		//function conver
+
+		document.getElementById("save").addEventListener("click", function() {
+				console.log("CAN YOU SEE THIS");
+			document.getElementById("makeSchedule").setAttribute("style", "display: none;")
+			document.getElementById("playButton").setAttribute("style", "display: block;")
+			document.getElementById("pause").setAttribute("style", "display: block;")
+
+
+			let workLength = document.getElementById("setting-work-length").value;
+			console.log("1: " + workLength);
+			let sBreakLength = document.getElementById("setting-sbreak-length").value;
+			console.log("2: " + sBreakLength);
+			let lBreakLength = document.getElementById("setting-lbreak-length").value;
+			console.log("3: " + lBreakLength);
+			let roundLength = document.getElementById("setting-round-length").value;
+			console.log("4: " + roundLength);
+			let numRounds = document.getElementById("setting-num-rounds").value;
+			console.log("5: " + numRounds);
+
+			for (let i = 0; i < numRounds.length; i++) {
+				for (let j = 0; j < roundLength; j++) {
+					cycle.push(new TimeBlock("pomodoro", workLength));
+					cycle.push(new TimeBlock("short-break", sBreakLength));
+				}
+				cycle.push(new TimeBlock("long-break", lBreakLength));
+			}
+			loadTable(cycle);
+			
+			
+		});
+
+		// document.getElementById("makeSchedule").addEventListener("click", function() {
+
+		// })
+
+
+		function loadTable(schedule) {
+			let table = document.querySelector("#timer-schedule");
+			let tb;
+			for (let i = 0; i < schedule.length; i++) {	
+				schedule[i].displayRow(table);
+			}
+		}
+
+
+		document.getElementById("playButton").addEventListener("click", function() {
+			t = new Timer(cycle)
 			t.init();
+				
 		});	
 
 		document.getElementById("pause").addEventListener("click", function() {
