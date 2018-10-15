@@ -7,6 +7,7 @@
 		this.curr = 0;
 		this.second = 0;
 		this.paused = false;
+		this.skipped = false;
 		this.endingBlock = false;
 		this.id = 0;
 		this.table = document.querySelector("#timer-schedule");
@@ -15,7 +16,11 @@
 	Timer.prototype.init = function() {
 		this.switchBlock();
 		this.id = setInterval(this.run.bind(this), 1000);
-	}
+	},
+
+	Timer.prototype.skip = function() {
+		this.skipped = true;
+	},
 
 
 	Timer.prototype.pause = function() {
@@ -34,7 +39,15 @@
 		if (this.curr == this.pomodoroNum) {
 			clearInterval(this.id);
 		} else {
-			if (!this.paused) {
+			if (this.skipped) {
+				
+				this.table.rows[this.curr + 1].cells[3].innerHTML = "SKIPPED"
+					this.table.rows[this.curr + 1].classList.remove("currentBlock");
+					this.curr++;
+				this.skipped = false;
+				this.switchBlock();
+			}
+			else if (!this.paused) {
 
 				if (this.endingBlock) {
 					this.switchBlock();
@@ -149,6 +162,7 @@
 			document.getElementById("makeSchedule").setAttribute("style", "display: none;")
 			document.getElementById("playButton").setAttribute("style", "display: block;")
 			document.getElementById("pause").setAttribute("style", "display: block;")
+			document.getElementById("skip").setAttribute("style", "display: block;")
 
 
 			let workLength = document.getElementById("setting-work-length").value;
@@ -192,6 +206,10 @@
 			t = new Timer(cycle)
 			t.init();
 				
+		});
+
+		document.getElementById("skip").addEventListener("click", function() {
+			t.skip();
 		});	
 
 		document.getElementById("pause").addEventListener("click", function() {
