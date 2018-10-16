@@ -40,10 +40,9 @@
 			clearInterval(this.id);
 		} else {
 			if (this.skipped) {
-				
 				this.table.rows[this.curr + 1].cells[3].innerHTML = "SKIPPED"
-					this.table.rows[this.curr + 1].classList.remove("currentBlock");
-					this.curr++;
+				this.table.rows[this.curr + 1].classList.remove("currentBlock");
+				this.curr++;
 				this.skipped = false;
 				this.switchBlock();
 			}

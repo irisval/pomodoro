@@ -10,6 +10,7 @@
     <link rel="import" href="sections/timer.html">
     <link rel="import" href="sections/pomodoros.html">
     <link rel="import" href="sections/history.html">
+    <link rel="import" href="sections/todo.html">
 </head>
 
 <body>
@@ -22,7 +23,9 @@
         <title>Electron tutorial app</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="assets/css/main.css" />
+        
+         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!--   -->
     </head>
 
     <body>
@@ -35,7 +38,7 @@
                         <li><a id="welcome-menu" data-section="timer" href="#">Timer</a></li>
                         <li><a data-section="pomodoros" href="#">Pomodoros</a></li>
                         <li><a data-section="history" href="#">History</a></li>
-                       <!--  <li><a data-section="getintouch" href="#">Get in touch</a></li> -->
+                        <li><a data-section="todo" href="#">Get in touch</a></li>
                     </ul>
                 </nav>
             </div>
@@ -49,8 +52,7 @@
         <footer id="footer" class="wrapper style1-alt">
             <div class="inner">
                 <ul class="menu">
-                    <li>&copy; Untitled. All rights reserved.</li>
-                    <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                    
                 </ul>
             </div>
         </footer>
@@ -76,6 +78,7 @@
         <script>
             // You can also require other files to run in this process
    require('./assets/js/timer');
+   require('./assets/js/todo');
               require('./renderer.js')
         </script>
     </body>
