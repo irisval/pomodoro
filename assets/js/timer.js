@@ -1,8 +1,43 @@
-// timer object
-let Timer = function(sched) {
+var ProgressBar = require('progressbar.js');
+
+let bar;
+function loadProgress() {	
+	bar = new ProgressBar.SemiCircle(progressContainer, {
+		strokeWidth: 6,
+		duration: 1400,
+		color: '#FFEA82',
+		trailColor: '#eee',
+		trailWidth: 1,
+		svgStyle: null,
+		text: {
+			value: "00:00",
+			alignToBottom: true
+		},
+		from: {color: '#FFEA82'},
+		to: {color: '#ED6A5A'},
+		step: function(state, bar) {
+		    bar.path.setAttribute('stroke', state.color);
+		    if (bar.value() != 0) {
+		    	bar.text.style.color = state.color;
+		    }
+		  }
+	});
+
+	bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+	bar.text.style.fontSize = '2rem';
+	bar.text.style.color = bar.color;
+}
+
+
+let Timer = function(sched, roundLength, numRounds) {
 	this.pomodoroNum = sched.length;
+	this.numRounds = numRounds;
+	this.roundLength = (roundLength * 2) + 1
+	this.goal = roundLength * numRounds;
 	this.schedule = sched;
 	this.curr = 0;
+	this.currWorkSession = 0;
+	this.currRound = 0;
 	this.second = 0;
 	this.paused = false;
 	this.skipped = false;
@@ -17,20 +52,51 @@ Timer.prototype.init = function() {
 },
 
 Timer.prototype.skip = function() {
+	bar.destroy();
+	loadProgress();
 	this.skipped = true;
 },
 
 
 Timer.prototype.pause = function() {
+
+	if (this.paused) {
+  		bar._progressPath._tweenable.resume();
+	} else {
+		bar._progressPath._tweenable.pause();
+	}
 	this.paused = !this.paused;
+
 },
 
 Timer.prototype.switchBlock = function() {
-	this.table.rows[this.curr + 1].className += "currentBlock";
-	this.table.rows[this.curr + 1].cells[2].innerHTML = new Date().toLocaleTimeString();
-	document.getElementById("tracking").innerHTML = this.schedule[this.curr].ttype + ", " + (this.curr + 1) + "/" + this.pomodoroNum;
+	let dur = (this.schedule[this.curr].initialMinuteAmt * 60000) + (this.schedule[this.curr].initialSecondAmt * 1000);
+	bar.animate(1.0, { duration: dur});
+	this.updateCounts();
+	this.updateText();
 },
 
+Timer.prototype.updateText = function() {
+	this.table.rows[this.curr + 1].className += "currentBlock";
+	this.table.rows[this.curr + 1].cells[2].innerHTML = new Date().toLocaleTimeString();
+		// document.getElementById("tracking").innerHTML = this.schedule[this.curr].ttype + ", " + (this.curr + 1) + "/" + this.pomodoroNum;
+
+	document.getElementById("type").innerHTML = "Type: " + this.schedule[this.curr].ttype;
+	document.getElementById("round").innerHTML = "Round: " + (this.currRound) + "/" + this.numRounds; 
+	document.getElementById("goal").innerHTML = "Goal: " + (this.currWorkSession) + "/" + this.goal;
+}
+
+Timer.prototype.updateCounts = function() {
+	
+	if (this.curr % this.roundLength == 0) {
+		this.currRound++;
+	}
+	console.log(this.schedule[this.curr].ttype);
+	if (this.schedule[this.curr].ttype === "Pomodoro") {
+		this.currWorkSession++;
+		console.log(this.currWorkSession);
+	}
+}
 
 Timer.prototype.run = function() {
 	
@@ -50,19 +116,26 @@ Timer.prototype.run = function() {
 				this.switchBlock();
 				this.endingBlock = false;
 			}
+
 			let tb = this.schedule[this.curr];
 			let dur = tb.duration;
+			
 			let min = parseInt(dur / 60);
 			let sec = parseInt(dur % 60);
 			min = ("0" + min).slice(-2);
 			sec = ("0" + sec).slice(-2);
-			document.querySelector('#time').textContent = min + ":" + sec;
+			// document.querySelector('#time').textContent = min + ":" + sec;
 			
+			let remaining = min + ":" + sec;
+			bar.setText(remaining);
+
 			if (dur  == 0) {
 				this.table.rows[this.curr + 1].cells[3].innerHTML = new Date().toLocaleTimeString();
 				this.table.rows[this.curr + 1].classList.remove("currentBlock");
 				this.curr++;
 				this.endingBlock = true;
+				bar.destroy();
+				loadProgress();
 
 				// this.switchBlock();
 				
@@ -81,7 +154,7 @@ Timer.prototype.run = function() {
 let TimeBlock = function(ttype, timeAmt) {
 	this.ttype = ttype;
 	this.timeAmt = timeAmt;
-	this.initialMinuteAmt = timeAmt / 60; 
+	this.initialMinuteAmt = Math.floor(timeAmt / 60); 
 	this.initialSecondAmt = timeAmt % 60;
 	this.duration = timeAmt;
 	// this.initialMinuteAmt = parseInt(this.timeAmt.split(":")[0]);
@@ -137,6 +210,8 @@ TimeBlock.prototype.displayRow = function(table) {
 
 function loadDefault() {
 	let cycle = [];
+	let roundLength;
+	let numRounds;
 	let t;
 
 	document.getElementById("save").addEventListener("click", function() {
@@ -149,26 +224,30 @@ function loadDefault() {
 		let workLength = document.getElementById("setting-work-length").value;
 		let sBreakLength = document.getElementById("setting-sbreak-length").value;
 		let lBreakLength = document.getElementById("setting-lbreak-length").value;
-		let roundLength = document.getElementById("setting-round-length").value;
-		let numRounds = document.getElementById("setting-num-rounds").value;
+		roundLength = document.getElementById("setting-round-length").value;
+		numRounds = document.getElementById("setting-num-rounds").value;
 
-		for (let i = 0; i < numRounds.length; i++) {
+		for (let i = 0; i < numRounds; i++) {
 			for (let j = 0; j < roundLength; j++) {
-				cycle.push(new TimeBlock("pomodoro", workLength));
-				cycle.push(new TimeBlock("short-break", sBreakLength));
+				cycle.push(new TimeBlock("Pomodoro", workLength));
+				cycle.push(new TimeBlock("Short Break", sBreakLength));
 			}
-			cycle.push(new TimeBlock("long-break", lBreakLength));
+			cycle.push(new TimeBlock("Long Break", lBreakLength));
 		}
-		loadTable(cycle);
+		loadTable(cycle, (roundLength * 2) + 1);
+
+		document.getElementById("type").innerHTML = "Type: --" 
+		document.getElementById("round").innerHTML = "Round: 0 /" + numRounds; 
+		document.getElementById("goal").innerHTML = "Goal: 0 /" + (roundLength * numRounds);
+
 		
 		
 	});
 
 
-
 	function loadTable(schedule) {
 		let table = document.querySelector("#timer-schedule");
-		let tb;
+
 		for (let i = 0; i < schedule.length; i++) {	
 			schedule[i].displayRow(table);
 		}
@@ -176,9 +255,8 @@ function loadDefault() {
 
 
 	document.getElementById("playButton").addEventListener("click", function() {
-		t = new Timer(cycle)
+		t = new Timer(cycle, roundLength, numRounds)
 		t.init();
-			
 	});
 
 	document.getElementById("skip").addEventListener("click", function() {
@@ -201,7 +279,9 @@ function loadDefault() {
 
 document.addEventListener('DOMContentLoaded', function(){
     let sections = document.querySelectorAll(".sec-link");
-    
+    loadProgress();
+	
+	
     for (let i = 0; i < sections.length; i++) {
         sections[i].addEventListener("click", function(){
 
@@ -223,6 +303,6 @@ document.addEventListener('DOMContentLoaded', function(){
         });
             }
 
-         loadDefault();
+        loadDefault();
     
 }, false);

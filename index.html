@@ -29,7 +29,16 @@
             <div style="text-align: center;" class="inner">
                <h1>Pomato Timer</h1>
                <p id ="tracking"></p>
-               <div style="font-size: 3em;"><span id="time">00:00</span></div>
+               <div id="progressContainer"></div>
+               <!-- <div style="font-size: 3em;"><span id="time">00:00</span></div> -->
+           </div>
+               <p><span id="type"></span></p>
+               <p><span id="round"></span></p>
+               <p><span id="goal"></span></p>
+               <script>
+                
+</script>
+               
                <ul class="actions">
                   <li><a href="#one" href="history.html" id="makeSchedule" class="button scrolly">Make Schedule</a></li>
                   <li><a href="#one" id="playButton" style="display: none;" class="button scrolly">Play</a></li>
@@ -37,6 +46,10 @@
                   <li><a href="#one" id="skip" style="display: none;" class="button scrolly">Skip</a></li>
                   <!--  <li><a href="#one" id="pause" class="button scrolly">End Session</a></li> -->
                </ul>
+               <br>
+               <br>
+               <br>
+               <br>
                <div id="pomodoro-task">
                </div>
             </div>
@@ -107,7 +120,8 @@
          // You can also require other files to run in this process
          require('./assets/js/timer');
          require('./assets/js/todo');
-           require('./renderer.js')
+           require('./renderer.js');
+         
       </script>
    </body>
 </html>

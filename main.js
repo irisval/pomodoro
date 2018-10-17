@@ -6,7 +6,7 @@ let secondWindow
 
 function createWindow () {
 
-  firstWindow = new BrowserWindow({width: 1281, height: 800})
+  firstWindow = new BrowserWindow({width: 625, height: 800})
 
   firstWindow.loadFile('index.html')
 
