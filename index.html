@@ -1,86 +1,113 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <link rel="import" href="sections/timer.html">
-    <link rel="import" href="sections/pomodoros.html">
-    <link rel="import" href="sections/history.html">
-    <link rel="import" href="sections/todo.html">
-</head>
-
-<body>
-    
-    <!DOCTYPE HTML>
-
-    <html>
-
-    <head>
-        <title>Electron tutorial app</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
-         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!--   -->
-    </head>
-
-    <body>
-
-        <!-- Sidebar -->
-        <section id="sidebar">
-            <div class="inner">
-                <nav>
-                    <ul>
-                        <li><a id="welcome-menu" data-section="timer" href="#">Timer</a></li>
-                        <li><a data-section="pomodoros" href="#">Pomodoros</a></li>
-                        <li><a data-section="history" href="#">History</a></li>
-                        <li><a data-section="todo" href="#">Get in touch</a></li>
-                    </ul>
-                </nav>
+   <head>
+      <meta charset="UTF-8">
+      <title>Pomodoro Timer</title>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" href="assets/css/main.css" />
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   </head>
+   <body>
+      <!-- Sidebar -->
+      <section id="sidebar">
+         <div class="inner">
+            <nav>
+               <ul>
+                  <li><a  data-active="1" class="sec-link" id="welcome-menu" href="#section-timer">Timer</a></li>
+                  <li><a data-active="0" class="sec-link" href="#section-schedule">Pomodoros</a></li>
+                  <li><a data-active="0"class="sec-link" href="#section-settings">History</a></li>
+                  <li><a data-active="0" class="sec-link" href="#section-todo">Get in touch</a></li>
+               </ul>
+            </nav>
+         </div>
+      </section>
+      <script></script>
+      <!-- Wrapper -->
+      <div id="wrapper">
+         <section id="section-timer" class="wrapper style1 fullscreen intro">
+            <div style="text-align: center;" class="inner">
+               <h1>Pomato Timer</h1>
+               <p id ="tracking"></p>
+               <div style="font-size: 3em;"><span id="time">00:00</span></div>
+               <ul class="actions">
+                  <li><a href="#one" href="history.html" id="makeSchedule" class="button scrolly">Make Schedule</a></li>
+                  <li><a href="#one" id="playButton" style="display: none;" class="button scrolly">Play</a></li>
+                  <li><a href="#one" id="pause" style="display: none;" class="button scrolly">Pause</a></li>
+                  <li><a href="#one" id="skip" style="display: none;" class="button scrolly">Skip</a></li>
+                  <!--  <li><a href="#one" id="pause" class="button scrolly">End Session</a></li> -->
+               </ul>
+               <div id="pomodoro-task">
+               </div>
             </div>
-        </section>
-
-        <!-- Wrapper -->
-        <div id="wrapper">
-        </div>
-
-        <!-- Footer -->
-        <footer id="footer" class="wrapper style1-alt">
+         </section>
+         <section id="section-schedule" class="hide wrapper style2 fullscreen intro">
             <div class="inner">
-                <ul class="menu">
-                    
-                </ul>
+               <h2>What we do</h2>
+               <div class="features">
+                  <table id="timer-schedule">
+                     <tr>
+                        <th>Type</th>
+                        <th>Length</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                     </tr>
+                  </table>
+               </div>
+               <ul class="actions">
+                  <li><a href="#" class="button">Learn more</a></li>
+               </ul>
             </div>
-        </footer>
-
-
-
-        <script>
-            window.$ = window.jQuery = require('jquery');
-        </script>
-     
-        <script src="assets/js/jquery.scrollex.min.js"></script>
-        <script src="assets/js/jquery.scrolly.min.js"></script>
-        <script src="assets/js/skel.min.js"></script>
-        <script src="assets/js/util.js"></script>
-        <script src="assets/js/main.js"></script>
-        <script>
-            require('./assets/js/menu')
-        </script>
-        <script>
-          require('./index')
-   
-</script>
-        <script>
-            // You can also require other files to run in this process
-   require('./assets/js/timer');
-   require('./assets/js/todo');
-              require('./renderer.js')
-        </script>
-    </body>
-
-    </html>
+         </section>
+         <section id="section-settings" class="hide wrapper style3 fullscreen intro">
+            <section>
+               <div class="content">
+                  <div class="inner">
+                     <h1>Settings</h1>
+                     <input type="number" id="setting-work-length" class="" name="setting-work-length" value="25" min="1" max="60">
+                     <label for="setting-work-length">Work block length</label>
+                     <input type="number" id="setting-sbreak-length" class="" name="setting-sbreak-length" value="5" min="1" max="60">
+                     <label for="setting-sbreak-length">Short break length</label>
+                     <input type="number" id="setting-lbreak-length" class="" name="setting-lbreak-length" value="20" min="1" max="60">
+                     <label for="setting-lbreak-length">Long break length</label>
+                     <input type="number" id="setting-round-length" class="" name="setting-round-length" value="4" min="10" max="60">
+                     <label for="setting-round-length">Number of work sessions before long break</label>
+                     <input type="number" id="setting-num-rounds" class="" name="setting-num-rounds" value="3" min="10" max="60">
+                     <label for="setting-num-rounds">Number of rounds</label>
+                     <input type="submit" id="save">
+                  </div>
+               </div>
+            </section>
+         </section>
+         <section id="section-todo" class="hide wrapper style4 fullscreen intro">
+            <div style="text-align: center;" class="inner">
+               <h1>To Do List</h1>
+               <div id="add-todo">
+                  <input type="text" placeholder="Add todo" id="add-todo-input" class="" name="add-todo-input">
+                  <input type="submit" id="add-todo-submit">
+               </div>
+               <div id="todos">
+                  <ul id="todo-list">
+                  </ul>
+               </div>
+            </div>
+         </section>
+      </div>
+      <!-- Footer -->
+      <!--   <footer id="footer" class="wrapper style1-alt">
+         <div class="inner">
+             <ul class="menu">
+                 
+             </ul>
+         </div>
+         </footer>
+         -->
+      <script></script>
+      <script>
+         // You can also require other files to run in this process
+         require('./assets/js/timer');
+         require('./assets/js/todo');
+           require('./renderer.js')
+      </script>
+   </body>
+</html>
