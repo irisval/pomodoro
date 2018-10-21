@@ -5,12 +5,12 @@ function loadProgress() {
 	bar = new ProgressBar.SemiCircle(progressContainer, {
 		strokeWidth: 6,
 		duration: 1400,
-		color: '#FFEA82',
-		trailColor: '#eee',
-		trailWidth: 1,
+		color: '#5a5a5a',
+		trailColor: 'rgba(102,153,204,0.18)',
+		trailWidth: 2.3,
 		svgStyle: null,
 		text: {
-			value: "00:00",
+			value: "00:00:00",
 			alignToBottom: true
 		},
 		from: {color: '#FFEA82'},
@@ -20,7 +20,9 @@ function loadProgress() {
 		    if (bar.value() != 0) {
 		    	bar.text.style.color = state.color;
 		    }
-		  }
+		}
+		
+
 	});
 
 	bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
@@ -215,7 +217,7 @@ function loadDefault() {
 	let t;
 
 	document.getElementById("save").addEventListener("click", function() {
-		document.getElementById("makeSchedule").setAttribute("style", "display: none;")
+		document.getElementById("goto-link").setAttribute("style", "display: none;")
 		document.getElementById("playButton").setAttribute("style", "display: block;")
 		document.getElementById("pause").setAttribute("style", "display: block;")
 		document.getElementById("skip").setAttribute("style", "display: block;")

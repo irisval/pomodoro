@@ -6,7 +6,7 @@
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="stylesheet" href="assets/css/main.css" />
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.1/css/all.css">
    </head>
    <body>
       <!-- Sidebar -->
@@ -14,7 +14,7 @@
          <div class="inner">
             <nav>
                <ul>
-                  <li><a  data-active="1" class="sec-link" id="welcome-menu" href="#section-timer">Timer</a></li>
+                  <li><a data-active="1" class="sec-link" id="welcome-menu" href="#section-timer">Timer</a></li>
                   <li><a data-active="0" class="sec-link" href="#section-schedule">Pomodoros</a></li>
                   <li><a data-active="0"class="sec-link" href="#section-settings">History</a></li>
                   <li><a data-active="0" class="sec-link" href="#section-todo">Get in touch</a></li>
@@ -26,33 +26,49 @@
       <!-- Wrapper -->
       <div id="wrapper">
          <section id="section-timer" class="wrapper style1 fullscreen intro">
-            <div style="text-align: center;" class="inner">
-               <h1>Pomato Timer</h1>
+
+      <!--       <div id="timer"> -->
+            <br>
+            <br>
+            <br>
+            <div class="inner">
+                <div class="center">
+                <i class="far fa-bell"></i>
+               <p id="title"><i class="fas fa-info-circle"></i> Pomodoro Timer</p>
                <p id ="tracking"></p>
+           </div>
                <div id="progressContainer"></div>
                <!-- <div style="font-size: 3em;"><span id="time">00:00</span></div> -->
-           </div>
-               <p><span id="type"></span></p>
-               <p><span id="round"></span></p>
-               <p><span id="goal"></span></p>
-               <script>
-                
-</script>
+           <!-- </div> -->
                
-               <ul class="actions">
-                  <li><a href="#one" href="history.html" id="makeSchedule" class="button scrolly">Make Schedule</a></li>
-                  <li><a href="#one" id="playButton" style="display: none;" class="button scrolly">Play</a></li>
-                  <li><a href="#one" id="pause" style="display: none;" class="button scrolly">Pause</a></li>
-                  <li><a href="#one" id="skip" style="display: none;" class="button scrolly">Skip</a></li>
+               <div id="timer-info">
+                    <span class="line">&nbsp</span>
+                    <span class="line-content" id="type">Type: </span><span class="line-content-right">----</span>
+                    <span class="line">&nbsp</span>
+                    <span class="line-content" id="goal">Goal: </span><span class="line-content-right">-- / --</span>
+                    <span class="line">&nbsp</span>
+                    <span class="line-content" id="round">Round: </span><span class="line-content-right">-- / --</span>
+                </div>
+                <div id = "goto-link">
+                    <a href="#section-settings">Create schedule</a>
+                </div>
+               
+               <div class="actions">
+                  
+                  <a href="#one" id="playButton" style="display: none;" class="button scrolly">Play</a>
+                  <a href="#one" id="pause" style="display: none;" class="button scrolly">Pause</a>
+                  <a href="#one" id="skip" style="display: none;" class="button scrolly">Skip</a>
                   <!--  <li><a href="#one" id="pause" class="button scrolly">End Session</a></li> -->
-               </ul>
+               </div>
+                </div>
+                
                <br>
                <br>
                <br>
                <br>
                <div id="pomodoro-task">
                </div>
-            </div>
+            
          </section>
          <section id="section-schedule" class="hide wrapper style2 fullscreen intro">
             <div class="inner">
@@ -107,14 +123,14 @@
          </section>
       </div>
       <!-- Footer -->
-      <!--   <footer id="footer" class="wrapper style1-alt">
+        <footer id="footer" class="wrapper style1-alt">
          <div class="inner">
              <ul class="menu">
                  
              </ul>
          </div>
          </footer>
-         -->
+        
       <script></script>
       <script>
          // You can also require other files to run in this process

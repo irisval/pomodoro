@@ -1,13 +1,18 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:200,400,500");
 html, body, div {
   margin: 0;
   padding: 0;
   border: 0;
   font-size: 100%;
   font: inherit;
-  color: #fff; }
+  font-weight: 300;
+  color: #5a5a5a;
+  font-family: 'Raleway', sans-serif; }
 
 a {
-  color: #fff; }
+  color: rgba(90, 90, 90, 0.88);
+  text-decoration: none;
+  font-weight: 400; }
 
 #sidebar {
   height: 3.5em;
@@ -20,8 +25,9 @@ a {
   width: 100%;
   z-index: 10000;
   position: fixed;
-  background: #111b27;
-  cursor: default; }
+  /* background: rgba(121,159,220,0.5);*/
+  cursor: default;
+  border-bottom: solid 1px rgba(102, 119, 136, 0.25); }
   #sidebar > .inner {
     display: flex;
     justify-content: center;
@@ -56,16 +62,27 @@ a {
         position: relative;
         opacity: 1;
         transform: translateY(0); }
+        #sidebar nav ul li a {
+          font-size: 0.8rem; }
+        #sidebar nav ul li a:hover, #sidebar nav ul li a[data-active="1"] {
+          font-weight: 500;
+          color: #5a5a5a;
+          background-image: linear-gradient(to right, rgba(102, 153, 204, 0.28) 0%, rgba(102, 153, 204, 0.28) 100%);
+          /*rgba(102,153,204,0.28)*/ }
 
 .wrapper {
   position: relative;
-  background: #19283b;
-  /*    background: linear-gradient( #263d59, #19283b);*/ }
+  /*background: $primary;*/
+  /* background: linear-gradient( #263d59, #19283b);*/ }
   .wrapper.fullscreen {
     min-height: calc(100vh - 2.5em); }
   .wrapper > .inner {
     width: 100%; }
 
+.center {
+  text-align: center; }
+
+/*dusty 121,159,220*/
 .show {
   display: block !important; }
 
@@ -73,8 +90,59 @@ a {
   display: none !important; }
 
 #progressContainer {
-  margin: 20px;
-  width: 200px;
-  height: 100px; }
+  margin: 0 auto;
+  width: 260px; }
+  #progressContainer span {
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%); }
+
+.fa-bell {
+  margin-top: 15px;
+  font-size: 1.7em;
+  color: rgba(90, 90, 90, 0.5); }
+
+.fa-info-circle {
+  font-size: 0.75em;
+  color: rgba(90, 90, 90, 0.88);
+  /*color: rgba(121,159,220,0.9);*/
+  /*color: rgba(102,153,204,0.48);*/ }
+
+#title {
+  font-weight: 400;
+  font-size: 1.35rem; }
+
+#timer {
+  background: linear-gradient(90deg, #36D1DC, #5B86E5);
+  height: 44vh; }
+
+#timer-info {
+  margin-top: 7vh; }
+
+.line::after {
+  margin-left: 65px;
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  width: 105vw;
+  height: 1.7px;
+  background: linear-gradient(to right, rgba(121, 159, 220, 0.5), transparent 70%); }
+
+.line-content {
+  margin: 100px 0;
+  padding: 0;
+  margin-left: 85px; }
+
+.line-content-right {
+  float: right;
+  margin-right: 105px; }
+
+#goto-link {
+  text-align: center;
+  margin-top: 2.5em;
+  font-size: 0.9em;
+  text-decoration: underline; }
+  #goto-link a {
+    color: rgba(121, 159, 220, 0.9); }
 
 /*# sourceMappingURL=main.css.map */
