@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:200,400,500");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400");
 html, body, div {
   margin: 0;
   padding: 0;
@@ -71,9 +72,7 @@ a {
           /*rgba(102,153,204,0.28)*/ }
 
 .wrapper {
-  position: relative;
-  /*background: $primary;*/
-  /* background: linear-gradient( #263d59, #19283b);*/ }
+  position: relative; }
   .wrapper.fullscreen {
     min-height: calc(100vh - 2.5em); }
   .wrapper > .inner {
@@ -137,12 +136,242 @@ a {
   float: right;
   margin-right: 105px; }
 
-#goto-link {
+#goto-link-div {
   text-align: center;
   margin-top: 2.5em;
   font-size: 0.9em;
   text-decoration: underline; }
-  #goto-link a {
+  #goto-link-div a {
     color: rgba(121, 159, 220, 0.9); }
+
+.button {
+  background-color: #799fdc;
+  border: none;
+  color: white;
+  padding: 0.55rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.8rem;
+  display: inline-block;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem;
+  border-radius: 3px; }
+
+/*
+.button {
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+    background-color: rgb(121,159,220);
+    text-align: center;
+    letter-spacing: .5px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 2px;
+    font-size: 14px;
+    outline: 0;
+}*/
+/*input {
+  margin: 0 .25rem;
+  min-width: 125px;
+  height: 2.25em;
+  border: 1px solid #eee;
+  border-left: 3px solid;
+  border-radius: 5px;
+  transition: border-color .5s ease-out;
+  border-left-color: #999;
+   padding-bottom: calc(.375em - 1px);
+    padding-left: calc(.625em - 1px);
+    padding-right: calc(.625em - 1px);
+    padding-top: calc(.375em - 1px);
+    transition: border-color .5s ease-out;
+}
+input:focus {
+    border-left-color: rgba(121,159,220,0.9);
+    outline: none;
+}
+label {
+    font-size: .8rem;
+    color: #999;
+    display: block;
+    font-weight: 400;
+    margin-bottom: .2em;
+}
+
+label:active {
+    color:rgba(121,159,220,0.9);
+}*/
+/*label {
+    font-size: .8rem;
+    font-weight: 500 !important;
+    color: #F55448 !important;
+}
+*/
+/* form starting stylings ------------------------------- */
+#section-settings-inner {
+  margin-left: 50px; }
+
+.outer-group {
+  display: flex; }
+
+.group {
+  position: relative;
+  margin-bottom: 4em; }
+  .group.right {
+    margin-left: 2em; }
+
+input {
+  color: #757575;
+  font-size: 0.9rem;
+  caret-color: rgba(121, 159, 220, 0.9);
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 140px;
+  border: none;
+  border-bottom: 1px solid #757575; }
+
+input:focus {
+  outline: none; }
+
+/* LABEL ======================================= */
+label {
+  color: rgba(121, 159, 220, 0.9);
+  /*color: #5264AE;*/
+  font-size: .8rem;
+  font-weight: 300;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 1px;
+  top: 10px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all; }
+
+/* active state */
+input:focus ~ label, input:valid ~ label {
+  top: -21px;
+  font-size: .8rem;
+  color: rgba(121, 159, 220, 0.9);
+  /*color: #5264AE;*/ }
+
+/* BOTTOM BARS ================================= */
+.bar {
+  position: relative;
+  display: block;
+  width: 155px; }
+
+.bar:before, .bar:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: rgba(121, 159, 220, 0.9);
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all; }
+
+.bar:before {
+  left: 50%; }
+
+.bar:after {
+  right: 50%; }
+
+/* active state */
+input:focus ~ .bar:before, input:focus ~ .bar:after {
+  width: 50%; }
+
+/* HIGHLIGHTER ================================== */
+.highlight {
+  position: absolute;
+  height: 60%;
+  width: 100px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5; }
+
+/* active state */
+input:focus ~ .highlight {
+  -webkit-animation: inputHighlighter 0.4s ease;
+  -moz-animation: inputHighlighter 0.4s ease;
+  animation: inputHighlighter 0.4s ease; }
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+  from {
+    background: #5264AE; }
+  to {
+    width: 0;
+    background: transparent; } }
+@-moz-keyframes inputHighlighter {
+  from {
+    background: #5264AE; }
+  to {
+    width: 0;
+    background: transparent; } }
+@keyframes inputHighlighter {
+  from {
+    background: #5264AE; }
+  to {
+    width: 0;
+    background: transparent; } }
+/*input {
+  background-color: rgba(219, 219, 219, 0.5);
+
+    color: #4a4a4a;
+    box-shadow: 0 2px 2px 0 rgba(219, 219, 219, 0.5), 0 3px 1px -2px rgba(219, 219, 219, 0.5), 0 1px 5px 0 rgba(219, 219, 219, 0.5);
+    
+     min-width: 70px;
+
+    display: inline-flex;
+    font-size: 1rem;
+    height: 2.25em;
+    justify-content: flex-start;
+    line-height: 1.5;
+    padding-bottom: calc(.375em - 1px);
+    padding-left: calc(.625em - 1px);
+    padding-right: calc(.625em - 1px);
+    padding-top: calc(.375em - 1px);
+    position: relative;
+    vertical-align: top;
+        -webkit-appearance: none;
+    align-items: center;
+    border: none;
+    border-radius: 4px;
+        margin: 0;
+            letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+        text-rendering: auto;
+    margin-bottom: 1.2em;
+    border-bottom: 1.75px solid rgba(102,153,204,0.58) !important;
+}
+input:focus, input:active {
+   outline: none;
+    border-color: #3273dc;
+    caret-color: rgba(121,159,220,0.9);
+
+
+}
+.control {
+    clear: both;
+    font-size: 1rem;
+    position: relative;
+    text-align: left;
+}
+label {
+    font-size: .8rem;
+    color: #5a5a5a;
+    display: block;
+    font-weight: 400;
+    margin-bottom: .5em;
+}*/
 
 /*# sourceMappingURL=main.css.map */

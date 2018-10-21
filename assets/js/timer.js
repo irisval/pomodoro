@@ -217,11 +217,17 @@ function loadDefault() {
 	let t;
 
 	document.getElementById("save").addEventListener("click", function() {
-		document.getElementById("goto-link").setAttribute("style", "display: none;")
-		document.getElementById("playButton").setAttribute("style", "display: block;")
-		document.getElementById("pause").setAttribute("style", "display: block;")
-		document.getElementById("skip").setAttribute("style", "display: block;")
+		document.querySelector("a[data-active='1']").setAttribute("data-active", 0);
+    	document.getElementById("section-settings").classList.add("hide");
+    	document.querySelector("a[href='#section-timer']").setAttribute("data-active", 1);
+    	document.getElementById("section-timer").classList.remove("hide");
 
+
+
+		document.getElementById("goto-link-div").classList.add("hide");
+		document.getElementById("playButton").classList.remove("hide");
+		document.getElementById("pause").classList.remove("hide");
+		document.getElementById("skip").classList.remove("hide");
 
 		let workLength = document.getElementById("setting-work-length").value;
 		let sBreakLength = document.getElementById("setting-sbreak-length").value;
@@ -280,6 +286,8 @@ function loadDefault() {
 
 
 document.addEventListener('DOMContentLoaded', function(){
+	// const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
+	// const helperText = new MDCTextFieldHelperText(document.querySelector('.mdc-text-field-helper-text'));
     let sections = document.querySelectorAll(".sec-link");
     loadProgress();
 	
@@ -299,11 +307,16 @@ document.addEventListener('DOMContentLoaded', function(){
                 document.getElementById(secId).classList.remove("hide");
                
             } 
-             
-
-            
+                 
         });
-            }
+        }
+
+        document.getElementById("goto-link").addEventListener("click", function(){
+        	document.querySelector("a[data-active='1']").setAttribute("data-active", 0);
+        	document.getElementById("section-timer").classList.add("hide");
+        	document.querySelector("a[href='#section-settings']").setAttribute("data-active", 1);
+        	document.getElementById("section-settings").classList.remove("hide");
+        });
 
         loadDefault();
     
